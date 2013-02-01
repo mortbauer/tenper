@@ -138,13 +138,12 @@ def confirm_virtualenv(config, delete_first=False):
 def list_envs():
     """Print a list of the available yaml file names to stdout."""
 
-    print('Available environments:')
     if not os.path.exists(configs):
         print('    None.')
     else:
         for f in os.listdir(configs):
             if f.endswith('.yml'):
-                print('    {}'.format(f[0:-4]))
+                print('{} '.format(f[0:-4]))
 
 
 def edit(env):
@@ -341,3 +340,6 @@ def main(argv=None):
     elif args.operation == 'start':
         start(args.env[0])
 
+
+if __name__ == '__main__':
+    main()
