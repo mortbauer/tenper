@@ -18,7 +18,14 @@ import yaml
 shell = os.getenv('SHELL')
 editor = os.getenv('EDITOR')
 configs = os.path.join(os.path.expanduser('~'), '.tenper')
-virtualenvs = os.path.join(os.path.expanduser('~'), '.virtualenvs')
+
+# if virtualenwrapper is used, a WORKON_HOME env variable might exist which
+# specifies the virtualenv directory, lets support this
+if os.getenv('WORKON_HOME'):
+    virtualenvs = os.getenv('WORKON_HOME')
+else:
+    virtualenvs = os.path.join(os.path.expanduser('~'), '.virtualenvs')
+
 config_template = """# Shows up in 'tmux list-sessions' and on the left side of the status bar.
 session name: {env}
 
