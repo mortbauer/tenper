@@ -20,7 +20,6 @@ class TenperTests(unittest.TestCase):
             tenper.command_list('echo {message}', message='Hello, world.'),
             ['echo', 'Hello, world.'])
 
-
     def test_run(self):
         with patch('subprocess.call') as call:
             tenper.run('ls /')
@@ -33,7 +32,6 @@ class TenperTests(unittest.TestCase):
                 window='hi')
             call.assert_called_once_with(
                 ['tmux', 'new-window', '-t', 'some thing', '-n', 'hi'])
-
 
     def test_parse_args(self):
         f, a = tenper.parse_args(['-l'])

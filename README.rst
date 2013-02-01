@@ -33,7 +33,7 @@ Create (or edit) a project.
 ---------------------------
 This will open a YAML file in your environment var $EDITOR.::
 
-    tenper -e my-project
+    tenper edit my-project
 
 The template looks like this.::
 
@@ -69,7 +69,7 @@ Start a session.
 ----------------
 If a session already exists, you'll be reattached.::
 
-    tenper my-project
+    tenper start my-project
 
 
 Delete a project.
@@ -77,14 +77,14 @@ Delete a project.
 You'll be prompted about deleting an associated virtualenv since you might be
 using it with virtualenvwrapper and want to keep it.::
 
-    tenper -d my-project
+    tenper del my-project
 
 
 List projects.
 --------------
 ::
 
-    tenper -l
+    tenper list
 
 
 Rebuild a virtualenv.
@@ -92,7 +92,7 @@ Rebuild a virtualenv.
 If you want to change the Python binary in a virtualenv, you can edit the
 project and then rebuild it with::
 
-    tenper --rebuild-env my-project
+    tenper rebuild my-project
 
 
 

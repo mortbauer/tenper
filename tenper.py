@@ -12,7 +12,6 @@ import os
 import shutil
 import subprocess
 import sys
-
 import yaml
 
 
@@ -49,6 +48,17 @@ windows:
         - top
 """
 
+class HelpParser(argparse.ArgumentParser):
+    """ creates a modified parser
+    which will print the help message if
+    an error occurs
+
+    Note: from Stackoverflow answer http://stackoverflow.com/a/4042861/1607448
+    """
+    def error(self, message):
+        sys.stderr.write('error: %s\n' % message)
+        self.print_help()
+        sys.exit(2)
 
 def command_list(template, **kwargs):
     """Split a command into an array (for subprocess).
@@ -274,48 +284,60 @@ def parse_args(args):
         (callable, [...arguments])
     """
 
-    parser = argparse.ArgumentParser(description=(
-        'A wrapper for tmux sessions and (optionally) virtualenv{,wrapper}. '
-        'Usage:\n'
-        '  tenper -l\n'
-        '  tenper -e new-environment\n'
-        '  tenper --rebuild-env some-env\n'
-        '  tenper some-env\n'))
+    parser = HelpParser(description=(
+        'A wrapper for tmux sessions and (optionally) virtualenv{,wrapper}. '))
 
-    parser.add_argument('--list', '-l', action='store_true', help=(
-        'List the available environments.'))
-    parser.add_argument('--edit', '-e', action='store_true', help=(
-        'Edit (or create) a new environment.'))
-    parser.add_argument('--delete', '-d', action='store_true', help=(
-        'Delete an environment. You\'ll be prompted to delete a virtualenv if '
-        'it exists.'))
-    parser.add_argument('--rebuild-env', action='store_true', help=(
-        'If the environment uses virtualenv, rebuild it.'))
-    parser.add_argument('env', nargs='?', help=(
-        'An environment name.'))
+    parser.add_argument('--test')
+
+    subparsers = parser.add_subparsers(dest='operation')
+
+    parser_list = subparsers.add_parser('list',
+            help=('List the available environments.'))
+
+    parser_edit = subparsers.add_parser('edit',
+            help=('Edit (or create) a new environment.'))
+    parser_edit.add_argument('env', nargs=1,
+            help=('An environment name.'))
+
+    parser_delete = subparsers.add_parser('del',
+            help=('Delete an environment.'))
+    parser_delete.add_argument('env', nargs=1,
+            help=('An environment name.'))
+
+    parser_rebuild = subparsers.add_parser('rebuild',
+            help=('If the environment uses virtualenv, rebuild it.'))
+    parser_rebuild.add_argument('env', nargs=1,
+            help=('An environment name.'))
+
+    parser_start = subparsers.add_parser('start',
+            help=('Starts the specified environment.'))
+    parser_start.add_argument('env', nargs=1,
+            help=('An environment name.'))
 
     parsed = parser.parse_args(args)
 
-    if parsed.list:
-        return (list_envs, [])
+    # print help if invocated without args
+    if parsed.operation == None:
+        parser.print_help()
 
-    if not parsed.env:
-        raise Exception('You must provide an environment name')
+    return parsed
 
-    if parsed.edit:
-        return (edit, [parsed.env])
 
-    if parsed.delete:
-        return (delete, [parsed.env])
+def main(argv=None):
 
-    if parsed.rebuild_env:
-        return (rebuild, [parsed.env])
+    if argv == None:
+        argv = sys.argv[1:]
 
-    if parsed.env:
-        return (start, [parsed.env])
+    args = parse_args(argv)
 
-    # This description of the problem is rude (stupid); maybe this interface
-    # sucks.
-    raise Exception((
-        'You must provide an environment name and maybe a flag, too. Use -h '
-        'for help'))
+    if args.operation == 'list':
+        list_envs()
+    elif args.operation == 'edit':
+        edit(args.env[0])
+    elif args.operation == 'del':
+        delete(args.env[0])
+    elif args.operation == 'rebuild':
+        rebuild(args.env[0])
+    elif args.operation == 'start':
+        start(args.env[0])
+

@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='tenper',
@@ -12,7 +12,11 @@ setup(
     author='Mason Staugler',
     author_email='mason@staugler.net',
     url='https://github.com/mqsoh/tenper',
+    #packages=['tenper'],
     py_modules=['tenper'],
-    scripts=['tenper'],
+    entry_points = {
+        'console_scripts' :
+            ['tenper = tenper:main'
+            ]},
     license='MIT license',
 )
