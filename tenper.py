@@ -286,8 +286,6 @@ def parse_args(args):
     parser = HelpParser(description=(
         'A wrapper for tmux sessions and (optionally) virtualenv{,wrapper}. '))
 
-    parser.add_argument('--test')
-
     subparsers = parser.add_subparsers(dest='operation')
 
     parser_list = subparsers.add_parser('list',
