@@ -95,6 +95,15 @@ project and then rebuild it with::
     tenper rebuild my-project
 
 
+To enable bash completion
+-------------------------
+tenper ships with support for bash completion, to use it you must source the
+provided ``tenper-completion.sh`` in your ``~.bashrc`` or place it into some
+systemwide location for completion like ``/etc/bash_completion.d/`` under arch
+linux.
+
+After sourcing the ``tenper-completion.sh`` file type ``tenper`` and hit
+``<TAB>`` and complete like a pro.
 
 License
 =======
