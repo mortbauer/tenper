@@ -127,7 +127,7 @@ def confirm_virtualenv(config, delete_first=False):
     if not config.get('virtualenv'):
         return
 
-    path = os.path.join(virtualenvs, config['session name'])
+    path = os.path.join(virtualenvs, config['virtualenv'].get('virtualenv',config['session name']))
 
     # Short circuit: virtualenv exists and we're not deleting it.
     if os.path.exists(path) and not delete_first:
