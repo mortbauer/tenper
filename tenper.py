@@ -128,6 +128,7 @@ def confirm_virtualenv(config, delete_first=False):
         return
 
     path = os.path.join(virtualenvs, config['virtualenv'].get('virtualenv',config['session name']))
+    print(path)
 
     # Short circuit: virtualenv exists and we're not deleting it.
     if os.path.exists(path) and not delete_first:
@@ -207,7 +208,10 @@ def start(env):
     confirm_virtualenv(config)
     session = config['session name']
     virtualenv = config.get('virtualenv', None)
-    virtualenv_path = os.path.join(virtualenvs, session, 'bin', 'activate') if virtualenv else None
+    if virtualenv:
+        virtualenv_path = os.path.join(virtualenvs, config['virtualenv'].get('virtualenv',config['session name']), 'bin', 'activate')
+    else:
+        virtualenv_path = None
 
     # Short circuit for a preexisting session.
     if run('tmux has-session -t {session}', session=config['session name']) == 0:
